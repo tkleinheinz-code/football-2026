@@ -324,6 +324,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 <div class="toast" id="toast"></div>
 
+<!-- ── App logic ─────────────────────────────────────────────────────────── -->
 <script>
   // ── State ──────────────────────────────────────────────────────────────────
   let notes = [];
@@ -345,27 +346,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   // ── Default workout plan ───────────────────────────────────────────────────
   const DEFAULT_WORKOUT = {
     1: { name: 'Upper body strength', exercises: [
-      { name: 'Bench press',     detail: '4×6 @ 75%',       done: false },
-      { name: 'Pull-ups',        detail: '3×10',             done: false },
-      { name: 'Dumbbell rows',   detail: '3×12 each',        done: false },
-      { name: 'Shoulder press',  detail: '3×10',             done: false }
+      { name: 'Bench press',      detail: '4x6 @ 75%',        done: false },
+      { name: 'Pull-ups',         detail: '3x10',              done: false },
+      { name: 'Dumbbell rows',    detail: '3x12 each',         done: false },
+      { name: 'Shoulder press',   detail: '3x10',              done: false }
     ]},
     3: { name: 'Speed & agility', exercises: [
-      { name: '40-yard dash × 6', detail: 'Full rest between', done: false },
-      { name: 'Ladder drills',    detail: '4 patterns × 3',   done: false },
-      { name: '3-cone drill',     detail: '5 × full speed',   done: false },
-      { name: 'Box jumps',        detail: '4×6',              done: false }
+      { name: '40-yard dash x6',  detail: 'Full rest between', done: false },
+      { name: 'Ladder drills',    detail: '4 patterns x3',     done: false },
+      { name: '3-cone drill',     detail: '5x full speed',     done: false },
+      { name: 'Box jumps',        detail: '4x6',               done: false }
     ]},
     5: { name: 'Lower body strength', exercises: [
-      { name: 'Squats',           detail: '4×6 @ 80%',   done: false },
-      { name: 'Romanian deadlift',detail: '3×10',         done: false },
-      { name: 'Single-leg press', detail: '3×12 each',   done: false },
-      { name: 'Hip thrusts',      detail: '3×15',        done: false }
+      { name: 'Squats',           detail: '4x6 @ 80%',         done: false },
+      { name: 'Romanian deadlift',detail: '3x10',              done: false },
+      { name: 'Single-leg press', detail: '3x12 each',         done: false },
+      { name: 'Hip thrusts',      detail: '3x15',              done: false }
     ]},
     0: { name: 'Recovery & film', exercises: [
-      { name: 'Foam roll + stretch', detail: '20 min',          done: false },
-      { name: 'Film review',         detail: 'Watch last game', done: false },
-      { name: 'Mental prep journal', detail: '10 min',          done: false }
+      { name: 'Foam roll + stretch', detail: '20 min',         done: false },
+      { name: 'Film review',         detail: 'Watch last game',done: false },
+      { name: 'Mental prep journal', detail: '10 min',         done: false }
     ]}
   };
 
@@ -374,20 +375,21 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     document.getElementById('sync-dot').className = 'sync-dot ' + state;
   }
 
-  // ── Load all data from storage ─────────────────────────────────────────────
+  // ── Load all data ──────────────────────────────────────────────────────────
   async function loadAll() {
     setSyncDot('syncing');
     try {
       const [nr, pr, wr] = await Promise.all([
-        window.storage.get(NOTES_KEY,   true).catch(() => null),
-        window.storage.get(PLAYS_KEY,   true).catch(() => null),
-        window.storage.get(WORKOUT_KEY, true).catch(() => null)
+        window.storage.get(NOTES_KEY).catch(() => null),
+        window.storage.get(PLAYS_KEY).catch(() => null),
+        window.storage.get(WORKOUT_KEY).catch(() => null)
       ]);
       notes        = nr ? JSON.parse(nr.value) : [];
       plays        = pr ? JSON.parse(pr.value) : [];
       workoutState = wr ? JSON.parse(wr.value) : JSON.parse(JSON.stringify(DEFAULT_WORKOUT));
       setSyncDot('synced');
     } catch (e) {
+      console.error('Load error:', e);
       workoutState = JSON.parse(JSON.stringify(DEFAULT_WORKOUT));
       setSyncDot('error');
     }
@@ -399,18 +401,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   // ── Persist helpers ────────────────────────────────────────────────────────
   async function saveNotes() {
     setSyncDot('syncing');
-    try   { await window.storage.set(NOTES_KEY,   JSON.stringify(notes),        true); setSyncDot('synced'); }
-    catch { setSyncDot('error'); }
+    try   { await window.storage.set(NOTES_KEY,   JSON.stringify(notes));        setSyncDot('synced'); }
+    catch (e) { console.error('Save error:', e); setSyncDot('error'); }
   }
   async function savePlays() {
     setSyncDot('syncing');
-    try   { await window.storage.set(PLAYS_KEY,   JSON.stringify(plays),        true); setSyncDot('synced'); }
-    catch { setSyncDot('error'); }
+    try   { await window.storage.set(PLAYS_KEY,   JSON.stringify(plays));        setSyncDot('synced'); }
+    catch (e) { console.error('Save error:', e); setSyncDot('error'); }
   }
   async function saveWorkout() {
     setSyncDot('syncing');
-    try   { await window.storage.set(WORKOUT_KEY, JSON.stringify(workoutState), true); setSyncDot('synced'); }
-    catch { setSyncDot('error'); }
+    try   { await window.storage.set(WORKOUT_KEY, JSON.stringify(workoutState)); setSyncDot('synced'); }
+    catch (e) { console.error('Save error:', e); setSyncDot('error'); }
   }
 
   // ── Toast ──────────────────────────────────────────────────────────────────
@@ -476,7 +478,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     const filtered = notes.filter(n =>
       !q || n.title.toLowerCase().includes(q) || (n.content || '').toLowerCase().includes(q)
     );
-    const list     = document.getElementById('notes-list');
+    const list = document.getElementById('notes-list');
     if (!filtered.length) {
       list.innerHTML = `<div class="empty-state"><i class="ti ti-notebook"></i>${q ? 'No notes match your search.' : 'No notes yet. Add your first one above.'}</div>`;
       return;
@@ -491,7 +493,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
           <button class="btn-icon" onclick="deleteNote(${n.id}, event)" aria-label="Delete note"><i class="ti ti-trash"></i></button>
         </div>
-        ${n.content ? `<div class="note-preview">${highlight(n.content.slice(0, 120) + (n.content.length > 120 ? '…' : ''), q)}</div>` : ''}
+        ${n.content ? `<div class="note-preview">${highlight(n.content.slice(0, 120) + (n.content.length > 120 ? '...' : ''), q)}</div>` : ''}
         <span class="note-tag ${n.tag}">${tagLabel[n.tag]}</span>
       </div>
     `).join('');
@@ -523,7 +525,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     const content = document.getElementById('workout-day-content');
     const plan    = workoutState[selectedDay];
     if (!plan) {
-      content.innerHTML = `<div class="empty-state"><i class="ti ti-moon"></i>Rest day — recovery is part of the game.</div>`;
+      content.innerHTML = `<div class="empty-state"><i class="ti ti-moon"></i>Rest day - recovery is part of the game.</div>`;
       return;
     }
     const done = plan.exercises.filter(e => e.done).length;
@@ -554,7 +556,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
   // ── Plays ──────────────────────────────────────────────────────────────────
   function renderPlays() {
-    const grid     = document.getElementById('plays-grid');
+    const grid      = document.getElementById('plays-grid');
     const typeLabel = { run: 'Run', pass: 'Pass', defense: 'Defense', special: 'Special teams' };
     const emojiMap  = { run: '🏃', pass: '📐', defense: '🛡️', special: '⚡' };
     if (!plays.length) {
@@ -595,7 +597,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     showToast('Play saved');
   }
 
-  // ── Canvas (play drawing) ──────────────────────────────────────────────────
+  // ── Canvas ─────────────────────────────────────────────────────────────────
   function initCanvas() {
     const canvas = document.getElementById('playCanvas');
     if (!canvas) return;
@@ -657,25 +659,30 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     const el = document.getElementById('tool-' + t);
     if (el) el.classList.add('active');
   }
+</script>
 
-<!-- Firebase SDKs — paste just before your closing </body> tag -->
+<!-- ── Firebase (loads after app logic, then boots the app) ──────────────── -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { initializeApp }              from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+                                        from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    // ← paste your config here
+    apiKey:            "AIzaSyCRScoj47DR_WWtorx51_kgDSZqlYF6vBE",
+    authDomain:        "football-playbook-2026.firebaseapp.com",
+    projectId:         "football-playbook-2026",
+    storageBucket:     "football-playbook-2026.firebasestorage.app",
+    messagingSenderId: "487775354973",
+    appId:             "1:487775354973:web:05ecdfae1ca7eca3d1cdb4"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
+  const firebaseApp = initializeApp(firebaseConfig);
+  const db          = getFirestore(firebaseApp);
 
-  // A fixed player ID — change this to the player's name/number
-  // e.g. "player_22" so multiple players can each have their own data
+  // Change this to the player's name or jersey number if multiple players use the app
   const PLAYER_ID = "player_1";
 
-  // Drop-in replacement for window.storage
+  // Drop-in replacement for window.storage used throughout the app
   window.storage = {
     get: async (key) => {
       const snap = await getDoc(doc(db, "players", PLAYER_ID, "data", key));
@@ -687,10 +694,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     }
   };
 
-  // Now that storage is ready, boot the app
+  // Boot the app now that Firebase is ready
   loadAll();
 </script>
 
-</script>
 </body>
 </html>
