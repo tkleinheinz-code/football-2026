@@ -33,13 +33,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   border-radius: 12px 12px 0 0; border-bottom: 2px solid var(--gold);
 }
 .header-crest {
-  width: 42px; height: 42px; background: transparent; border-radius: 50%;
+  width: 46px; height: 46px; background: transparent; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 13px; color: var(--black); font-weight: 700; flex-shrink: 0;
-  overflow: hidden;
+  font-size: 13px; color: var(--black); font-weight: 700; flex-shrink: 0; overflow: hidden;
 }
-.header-crest img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
-.header-crest.initials { font-size: 16px; }
+.header-crest img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.header-crest.initials { font-size: 16px; background: var(--gold); }
 .header-info h1 { color: #fff; font-size: 16px; font-weight: 500; }
 .header-info p { color: var(--gold); font-size: 11px; margin-top: 1px; letter-spacing: 0.07em; text-transform: uppercase; }
 .header-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
@@ -74,6 +73,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .btn-gold:hover { background: var(--gold-light); }
 .btn-sm { background: transparent; border: 0.5px solid var(--border); color: var(--text2); padding: 5px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
 .btn-sm:hover { background: var(--surface2); color: var(--text); }
+.btn-sm.active-mode { background: var(--black); color: var(--gold); border-color: var(--black); }
 .btn-icon { background: transparent; border: none; color: var(--text2); cursor: pointer; padding: 4px; font-size: 16px; line-height: 1; }
 .btn-icon:hover { color: var(--red); }
 .btn-icon.edit:hover { color: var(--gold); }
@@ -96,19 +96,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 16px; pointer-events: none; }
 .shared-note { font-size: 11px; color: var(--text2); text-align: center; margin-bottom: 10px; padding: 5px 10px; background: var(--surface2); border-radius: 8px; border: 0.5px solid var(--border); }
 .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-.form-actions { display: flex; gap: 8px; margin-top: 4px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
 
 /* ── Profile modal ── */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; }
 .modal-overlay.hidden { display: none; }
-.modal { background: var(--surface); border-radius: 16px; padding: 1.5rem; width: 100%; max-width: 400px; }
+.modal { background: var(--surface); border-radius: 16px; padding: 1.5rem; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
 .modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 1.25rem; color: var(--text); }
 .avatar-upload { display: flex; align-items: center; gap: 14px; margin-bottom: 1.25rem; }
-.avatar-preview {
-  width: 64px; height: 64px; border-radius: 12px; background: var(--gold);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px; font-weight: 700; color: var(--black); overflow: hidden; flex-shrink: 0;
-}
+.avatar-preview { width: 64px; height: 64px; border-radius: 12px; background: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; color: var(--black); overflow: hidden; flex-shrink: 0; }
 .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
 .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.25rem; }
 .btn-cancel { background: transparent; border: 0.5px solid var(--border); color: var(--text2); padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; }
@@ -133,7 +129,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 /* ── Workouts ── */
 .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 1.1rem; }
-.day-chip { text-align: center; padding: 7px 2px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface); cursor: pointer; }
+.day-chip { text-align: center; padding: 7px 2px; border-radius: 8px; border: 0.5px solid var(--border); background: var(--surface); cursor: pointer; transition: background 0.12s; }
 .day-chip .dl { font-size: 10px; color: var(--text2); }
 .day-chip .dn { font-size: 15px; font-weight: 500; color: var(--text); }
 .day-chip.active { background: var(--black); border-color: var(--black); }
@@ -141,6 +137,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .day-chip.has-workout { border-color: var(--gold-border); }
 .progress-bar-wrap { background: var(--surface2); border-radius: 20px; height: 6px; overflow: hidden; margin: 6px 0 12px; }
 .progress-bar { height: 6px; background: var(--gold); border-radius: 20px; transition: width 0.3s; }
+
+/* exercise rows — normal mode */
 .exercise-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); cursor: pointer; }
 .exercise-row:last-child { border-bottom: none; }
 .ex-check { width: 22px; height: 22px; border-radius: 50%; border: 0.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent; }
@@ -148,9 +146,39 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .ex-name { flex: 1; font-size: 14px; color: var(--text); }
 .ex-name.done { text-decoration: line-through; color: var(--text2); }
 .ex-detail { font-size: 12px; color: var(--text2); }
+
+/* exercise rows — edit mode */
+.exercise-row-edit { display: flex; align-items: center; gap: 6px; padding: 6px 0; border-bottom: 0.5px solid var(--border); }
+.exercise-row-edit:last-child { border-bottom: none; }
+.ex-edit-name { flex: 1.6; font-size: 13px; padding: 6px 8px; border: 0.5px solid var(--border); border-radius: 6px; background: var(--surface2); color: var(--text); font-family: inherit; }
+.ex-edit-detail { flex: 1; font-size: 13px; padding: 6px 8px; border: 0.5px solid var(--border); border-radius: 6px; background: var(--surface2); color: var(--text); font-family: inherit; }
+.ex-edit-name:focus, .ex-edit-detail:focus { outline: none; border-color: var(--gold); }
+.ex-drag { color: var(--text2); cursor: grab; font-size: 16px; padding: 0 2px; flex-shrink: 0; }
+
 .workout-box { background: var(--surface); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem; }
+.workout-box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
+.day-label-text { font-size: 15px; font-weight: 500; color: var(--text); }
+.wo-header-actions { display: flex; gap: 6px; align-items: center; }
 .day-prog-row { display: flex; justify-content: space-between; align-items: center; }
-.day-label-text { font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+
+/* workout day name inline edit */
+.wo-name-input { font-size: 15px; font-weight: 500; color: var(--text); border: none; border-bottom: 1.5px solid var(--gold); background: transparent; width: 100%; padding: 0 0 2px; font-family: inherit; outline: none; margin-bottom: 2px; }
+
+/* add exercise row */
+.add-exercise-row { display: flex; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 0.5px solid var(--border); }
+.add-exercise-row input { flex: 1; font-size: 13px; padding: 6px 8px; border: 0.5px solid var(--border); border-radius: 6px; background: var(--surface2); color: var(--text); font-family: inherit; }
+.add-exercise-row input:focus { outline: none; border-color: var(--gold); }
+.btn-add-ex { background: var(--gold); color: var(--black); border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.btn-add-ex:hover { background: var(--gold-light); }
+
+/* toggle rest day */
+.rest-day-toggle { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 0.5px solid var(--border); font-size: 13px; color: var(--text2); }
+.toggle-switch { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-track { position: absolute; inset: 0; background: var(--surface3); border-radius: 20px; cursor: pointer; transition: background 0.2s; }
+.toggle-track:before { content: ''; position: absolute; width: 14px; height: 14px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
+.toggle-switch input:checked + .toggle-track { background: var(--gold); }
+.toggle-switch input:checked + .toggle-track:before { transform: translateX(16px); }
 
 /* ── Plays ── */
 .plays-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 9px; margin-bottom: 1rem; }
@@ -183,12 +211,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .cal-nav:hover { background: var(--surface2); }
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 1rem; }
 .cal-dow { text-align: center; font-size: 11px; color: var(--text2); padding: 4px 0; font-weight: 500; }
-.cal-cell {
-  aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column;
-  align-items: center; justify-content: flex-start; padding-top: 5px;
-  cursor: pointer; border: 0.5px solid transparent; font-size: 13px;
-  color: var(--text2); position: relative; transition: background 0.12s;
-}
+.cal-cell { aspect-ratio: 1; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 5px; cursor: pointer; border: 0.5px solid transparent; font-size: 13px; color: var(--text2); position: relative; transition: background 0.12s; }
 .cal-cell:hover { background: var(--surface2); }
 .cal-cell.today { background: var(--surface2); border-color: var(--gold-border); color: var(--text); font-weight: 500; }
 .cal-cell.selected { background: var(--black); color: var(--gold); font-weight: 500; border-color: var(--black); }
@@ -196,29 +219,28 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .cal-cell .cal-num { font-size: 13px; line-height: 1; }
 .cal-dots { display: flex; gap: 2px; margin-top: 3px; flex-wrap: wrap; justify-content: center; }
 .cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.cal-dot.game     { background: var(--red); }
+.cal-dot.game { background: var(--red); }
 .cal-dot.practice { background: var(--gold); }
-.cal-dot.film     { background: var(--blue); }
-.cal-dot.workout  { background: var(--green); }
-.cal-dot.other    { background: var(--purple); }
-
+.cal-dot.film { background: var(--blue); }
+.cal-dot.workout { background: var(--green); }
+.cal-dot.other { background: var(--purple); }
 .event-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
 .event-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; padding: 0.75rem 1rem; display: flex; align-items: flex-start; gap: 10px; }
 .event-type-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-.event-type-dot.game     { background: var(--red); }
+.event-type-dot.game { background: var(--red); }
 .event-type-dot.practice { background: var(--gold); }
-.event-type-dot.film     { background: var(--blue); }
-.event-type-dot.workout  { background: var(--green); }
-.event-type-dot.other    { background: var(--purple); }
+.event-type-dot.film { background: var(--blue); }
+.event-type-dot.workout { background: var(--green); }
+.event-type-dot.other { background: var(--purple); }
 .event-info { flex: 1; }
 .event-title { font-size: 14px; font-weight: 500; color: var(--text); }
 .event-meta { font-size: 12px; color: var(--text2); margin-top: 2px; }
 .event-tag { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 20px; margin-top: 5px; font-weight: 500; }
-.event-tag.game     { background: #fcebeb; color: #a32d2d; }
+.event-tag.game { background: #fcebeb; color: #a32d2d; }
 .event-tag.practice { background: #faeeda; color: #854f0b; }
-.event-tag.film     { background: #e6f1fb; color: #185fa5; }
-.event-tag.workout  { background: #e1f5ee; color: #0f6e56; }
-.event-tag.other    { background: #eeedfe; color: #534ab7; }
+.event-tag.film { background: #e6f1fb; color: #185fa5; }
+.event-tag.workout { background: #e1f5ee; color: #0f6e56; }
+.event-tag.other { background: #eeedfe; color: #534ab7; }
 .cal-selected-label { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
 
 /* ── Toast ── */
@@ -231,9 +253,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
   <!-- Header -->
   <div class="header">
-    <div class="header-crest" id="header-crest">
-  <img src="logo.png" alt="Archbishop Mitty Monarchs">
-</div>
+    <div class="header-crest" id="header-crest"><img src="logo.png" alt="Archbishop Mitty Monarchs"></div>
     <div class="header-info">
       <h1 id="header-name">Monarchs Playbook</h1>
       <p id="header-sub">Archbishop Mitty Football</p>
@@ -281,7 +301,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
   <!-- WORKOUT TAB -->
   <div id="tab-workout" class="tab">
-    <div class="section-header"><h2>This week</h2></div>
+    <div class="section-header">
+      <h2>This week</h2>
+    </div>
     <div class="week-grid" id="week-grid"></div>
     <div id="workout-day-content"></div>
   </div>
@@ -408,6 +430,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 <script>
 let notes = [], plays = [], workoutState = {}, events = [], profile = {};
 let selectedDay = new Date().getDay();
+let editingWorkout = false;
 let noteFormOpen = false, playFormOpen = false, eventFormOpen = false;
 let currentTool = 'line', drawing = false, lastX = 0, lastY = 0;
 let ctx = null, canvasInitialized = false;
@@ -481,7 +504,7 @@ function switchTab(tab){
   if(tab==='plays'&&playFormOpen)setTimeout(()=>{if(!canvasInitialized)initCanvas();},60);
 }
 
-// ── Profile ──────────────────────────────────────────────────────────────────
+// ── Profile ───────────────────────────────────────────────────────────────────
 function applyProfile(){
   if(!profile.first&&!profile.number)return;
   const name=profile.first?(profile.first+(profile.last?' '+profile.last:'')):'';
@@ -496,7 +519,8 @@ function applyProfile(){
     crest.classList.remove('initials');
     prev.innerHTML=`<img src="${profile.avatar}" alt="avatar">`;
   } else {
-    crest.textContent=initials;crest.classList.add('initials');
+    crest.innerHTML=`<img src="logo.png" alt="Archbishop Mitty Monarchs">`;
+    crest.classList.remove('initials');
     prev.textContent=initials;
   }
 }
@@ -520,8 +544,7 @@ function handleAvatar(e){
   const reader=new FileReader();
   reader.onload=ev=>{
     profile.avatar=ev.target.result;
-    const prev=document.getElementById('avatar-preview');
-    prev.innerHTML=`<img src="${profile.avatar}" alt="avatar">`;
+    document.getElementById('avatar-preview').innerHTML=`<img src="${profile.avatar}" alt="avatar">`;
   };
   reader.readAsDataURL(file);
 }
@@ -542,7 +565,6 @@ function toggleNoteForm(){
   document.getElementById('note-form').style.display=noteFormOpen?'block':'none';
   if(noteFormOpen)document.getElementById('note-title').focus();
 }
-
 function saveNote(){
   const title=document.getElementById('note-title').value.trim();
   if(!title){showToast('Add a title first');return;}
@@ -554,16 +576,12 @@ function saveNote(){
   noteFormOpen=false;document.getElementById('note-form').style.display='none';
   persist(NOTES_KEY,notes);renderNotes();showToast('Note saved');
 }
-
 function deleteNote(id,e){e.stopPropagation();notes=notes.filter(n=>n.id!==id);persist(NOTES_KEY,notes);renderNotes();}
-
 function toggleEditNote(id){
-  const form=document.getElementById('edit-form-'+id);
-  if(!form)return;
+  const form=document.getElementById('edit-form-'+id);if(!form)return;
   form.classList.toggle('open');
   if(form.classList.contains('open'))document.getElementById('edit-content-'+id).focus();
 }
-
 function updateNote(id){
   const note=notes.find(n=>n.id===id);if(!note)return;
   note.title=document.getElementById('edit-title-'+id).value.trim()||note.title;
@@ -571,13 +589,11 @@ function updateNote(id){
   note.tag=document.getElementById('edit-tag-'+id).value;
   persist(NOTES_KEY,notes);renderNotes();showToast('Note updated');
 }
-
 function highlight(text,q){
   if(!q)return text;
   const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
   return text.replace(re,'<mark style="background:rgba(200,153,26,0.35);color:inherit;border-radius:2px;">$1</mark>');
 }
-
 function renderNotes(){
   const q=(document.getElementById('note-search')?.value||'').toLowerCase();
   const filtered=notes.filter(n=>!q||n.title.toLowerCase().includes(q)||(n.content||'').toLowerCase().includes(q));
@@ -624,16 +640,166 @@ function renderWeek(){
   }).join('');
   renderDayWorkout();
 }
-function selectDay(i){selectedDay=i;renderWeek();}
+
+function selectDay(i){
+  selectedDay=i;
+  editingWorkout=false;
+  renderWeek();
+}
+
+function toggleEditWorkout(){
+  editingWorkout=!editingWorkout;
+  renderDayWorkout();
+}
+
 function renderDayWorkout(){
   const content=document.getElementById('workout-day-content');
   const plan=workoutState[selectedDay];
-  if(!plan){content.innerHTML=`<div class="empty-state"><i class="ti ti-moon"></i>Rest day - recovery is part of the game.</div>`;return;}
+  const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+  if(!plan){
+    // Rest day — show option to add a workout
+    content.innerHTML=`
+      <div class="workout-box">
+        <div class="workout-box-header">
+          <span class="day-label-text" style="color:var(--text2);">Rest day</span>
+          <button class="btn-sm" onclick="addWorkoutDay(${selectedDay})"><i class="ti ti-plus"></i> Add workout</button>
+        </div>
+        <p style="font-size:13px;color:var(--text2);margin-top:8px;">Recovery is part of the game. Tap "Add workout" to schedule one for ${dayNames[selectedDay]}.</p>
+      </div>`;
+    return;
+  }
+
   const done=plan.exercises.filter(e=>e.done).length;
   const pct=Math.round((done/plan.exercises.length)*100);
-  content.innerHTML=`<div class="workout-box"><div class="day-prog-row"><span class="day-label-text">${plan.name}</span><span style="font-size:12px;color:var(--text2);">${done}/${plan.exercises.length}</span></div><div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>${plan.exercises.map((ex,i)=>`<div class="exercise-row" onclick="toggleExercise(${selectedDay},${i})"><div class="ex-check${ex.done?' done':''}"><i class="ti ti-check"></i></div><span class="ex-name${ex.done?' done':''}">${ex.name}</span><span class="ex-detail">${ex.detail}</span></div>`).join('')}</div>`;
+
+  if(!editingWorkout){
+    // ── View mode ──
+    content.innerHTML=`
+      <div class="workout-box">
+        <div class="workout-box-header">
+          <span class="day-label-text">${plan.name}</span>
+          <div class="wo-header-actions">
+            <span style="font-size:12px;color:var(--text2);">${done}/${plan.exercises.length}</span>
+            <button class="btn-sm" onclick="toggleEditWorkout()" title="Edit workout"><i class="ti ti-pencil"></i> Edit</button>
+            <button class="btn-icon" onclick="removeWorkoutDay(${selectedDay})" title="Remove this day's workout" style="color:var(--text2);font-size:18px;"><i class="ti ti-trash"></i></button>
+          </div>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+        ${plan.exercises.map((ex,i)=>`
+          <div class="exercise-row" onclick="toggleExercise(${selectedDay},${i})">
+            <div class="ex-check${ex.done?' done':''}"><i class="ti ti-check"></i></div>
+            <span class="ex-name${ex.done?' done':''}">${ex.name}</span>
+            <span class="ex-detail">${ex.detail}</span>
+          </div>
+        `).join('')}
+      </div>`;
+  } else {
+    // ── Edit mode ──
+    content.innerHTML=`
+      <div class="workout-box">
+        <div class="workout-box-header" style="margin-bottom:10px;">
+          <input class="wo-name-input" id="wo-name-input" value="${plan.name.replace(/"/g,'&quot;')}" placeholder="Workout name">
+          <div class="wo-header-actions">
+            <button class="btn-gold" onclick="saveWorkoutEdits(${selectedDay})" style="padding:6px 14px;font-size:12px;">Save</button>
+            <button class="btn-cancel" onclick="toggleEditWorkout()" style="padding:6px 12px;font-size:12px;">Cancel</button>
+          </div>
+        </div>
+        <p style="font-size:11px;color:var(--text2);margin-bottom:8px;">Edit exercise names and sets/reps. Tap the trash to remove an exercise.</p>
+        <div id="exercise-edit-list">
+          ${plan.exercises.map((ex,i)=>`
+            <div class="exercise-row-edit" id="ex-edit-row-${i}">
+              <i class="ti ti-grip-vertical ex-drag" title="Drag to reorder"></i>
+              <input class="ex-edit-name" id="ex-name-${i}" value="${ex.name.replace(/"/g,'&quot;')}" placeholder="Exercise name">
+              <input class="ex-edit-detail" id="ex-detail-${i}" value="${ex.detail.replace(/"/g,'&quot;')}" placeholder="Sets/reps">
+              <button class="btn-icon" onclick="removeExercise(${selectedDay},${i})" title="Remove exercise"><i class="ti ti-trash"></i></button>
+            </div>
+          `).join('')}
+        </div>
+        <div class="add-exercise-row">
+          <input type="text" id="new-ex-name" placeholder="Exercise name">
+          <input type="text" id="new-ex-detail" placeholder="Sets / reps">
+          <button class="btn-add-ex" onclick="addExercise(${selectedDay})"><i class="ti ti-plus"></i> Add</button>
+        </div>
+        <div class="rest-day-toggle">
+          <label class="toggle-switch">
+            <input type="checkbox" id="rest-day-toggle" onchange="toggleRestDay(${selectedDay},this.checked)">
+            <span class="toggle-track"></span>
+          </label>
+          <span>Mark as rest day (removes this workout)</span>
+        </div>
+      </div>`;
+  }
 }
-function toggleExercise(day,i){workoutState[day].exercises[i].done=!workoutState[day].exercises[i].done;persist(WORKOUT_KEY,workoutState);renderDayWorkout();}
+
+function addWorkoutDay(day){
+  const dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  workoutState[day]={name:dayNames[day]+' workout',exercises:[{name:'Exercise 1',detail:'3x10',done:false}]};
+  editingWorkout=true;
+  persist(WORKOUT_KEY,workoutState);
+  renderWeek();
+}
+
+function removeWorkoutDay(day){
+  if(!confirm('Remove this workout and mark day as rest?'))return;
+  delete workoutState[day];
+  editingWorkout=false;
+  persist(WORKOUT_KEY,workoutState);
+  renderWeek();
+}
+
+function removeExercise(day,idx){
+  if(workoutState[day].exercises.length<=1){showToast('Need at least one exercise');return;}
+  // Read current edited values before removing so other edits aren't lost
+  readExerciseEdits(day);
+  workoutState[day].exercises.splice(idx,1);
+  persist(WORKOUT_KEY,workoutState);
+  renderDayWorkout();
+}
+
+function addExercise(day){
+  const name=document.getElementById('new-ex-name').value.trim();
+  const detail=document.getElementById('new-ex-detail').value.trim();
+  if(!name){showToast('Enter an exercise name');return;}
+  // Preserve any in-progress edits before adding
+  readExerciseEdits(day);
+  workoutState[day].exercises.push({name,detail:detail||'',done:false});
+  persist(WORKOUT_KEY,workoutState);
+  renderDayWorkout();
+}
+
+function readExerciseEdits(day){
+  // Pull current input values into workoutState without saving yet
+  const plan=workoutState[day];if(!plan)return;
+  plan.exercises.forEach((ex,i)=>{
+    const nameEl=document.getElementById('ex-name-'+i);
+    const detailEl=document.getElementById('ex-detail-'+i);
+    if(nameEl)ex.name=nameEl.value.trim()||ex.name;
+    if(detailEl)ex.detail=detailEl.value.trim();
+  });
+}
+
+function saveWorkoutEdits(day){
+  const plan=workoutState[day];if(!plan)return;
+  const nameInput=document.getElementById('wo-name-input');
+  if(nameInput)plan.name=nameInput.value.trim()||plan.name;
+  readExerciseEdits(day);
+  editingWorkout=false;
+  persist(WORKOUT_KEY,workoutState);
+  renderDayWorkout();
+  showToast('Workout saved');
+}
+
+function toggleRestDay(day,isRest){
+  if(isRest){
+    removeWorkoutDay(day);
+  }
+}
+
+function toggleExercise(day,i){
+  workoutState[day].exercises[i].done=!workoutState[day].exercises[i].done;
+  persist(WORKOUT_KEY,workoutState);renderDayWorkout();
+}
 
 // ── Plays ─────────────────────────────────────────────────────────────────────
 function renderPlays(){
@@ -654,15 +820,12 @@ function renderPlays(){
     </div>
   `).join('');
 }
-
 function deletePlay(id,e){e.stopPropagation();plays=plays.filter(p=>p.id!==id);persist(PLAYS_KEY,plays);renderPlays();}
-
 function togglePlayForm(){
   playFormOpen=!playFormOpen;
   document.getElementById('play-form').style.display=playFormOpen?'block':'none';
   if(playFormOpen)setTimeout(()=>{if(!canvasInitialized)initCanvas();},60);
 }
-
 function savePlay(){
   const name=document.getElementById('play-name').value.trim();
   if(!name){showToast('Add a play name first');return;}
@@ -726,7 +889,6 @@ function changeMonth(dir){
   if(calMonth<0){calMonth=11;calYear--;}
   calSelected=null;renderCalendar();
 }
-
 function renderCalendar(){
   const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
   document.getElementById('cal-month-label').textContent=months[calMonth]+' '+calYear;
@@ -751,13 +913,11 @@ function renderCalendar(){
   document.getElementById('cal-grid').innerHTML=html;
   renderEventList();
 }
-
 function selectCalDay(dateStr){
   calSelected=dateStr;
   document.getElementById('add-event-btn').style.display='inline-flex';
   renderCalendar();
 }
-
 function renderEventList(){
   const list=document.getElementById('event-list');
   const label=document.getElementById('cal-selected-label');
@@ -780,18 +940,15 @@ function renderEventList(){
     </div>
   `).join('');
 }
-
 function formatTime(t){
   if(!t)return'';const[h,m]=t.split(':');const hr=parseInt(h);
   return`${hr>12?hr-12:hr||12}:${m} ${hr>=12?'PM':'AM'}`;
 }
-
 function toggleEventForm(){
   eventFormOpen=!eventFormOpen;
   document.getElementById('event-form').style.display=eventFormOpen?'block':'none';
   if(eventFormOpen)document.getElementById('event-title').focus();
 }
-
 function saveEvent(){
   const title=document.getElementById('event-title').value.trim();
   if(!title){showToast('Add a title first');return;}
@@ -810,7 +967,6 @@ function saveEvent(){
   eventFormOpen=false;document.getElementById('event-form').style.display='none';
   persist(EVENTS_KEY,events);renderCalendar();showToast('Event saved');
 }
-
 function deleteEvent(id){events=events.filter(e=>e.id!==id);persist(EVENTS_KEY,events);renderCalendar();}
 </script>
 
